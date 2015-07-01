@@ -1,0 +1,38 @@
+ig.module(
+	'game.entities.atom'
+)
+.requires(
+	'impact.entity'
+)
+.defines(function(){
+
+EntityAtom = ig.Entity.extend({
+	size: {x: 16, y:16},
+	
+	type: ig.Entity.TYPE.A, // Player friendly group
+	//checkAgainst: ig.Entity.TYPE.NONE,
+	collides: ig.Entity.COLLIDES.FIXED,
+	
+	//animSheet: new ig.AnimationSheet( 'media/player.png', 16, 16 ),	
+	
+	
+	// These are our own properties. They are not defined in the base
+	// ig.Entity class. We just use them internally for the Player
+	bound: false,
+	bounce: 0,
+	rigid: 1,
+	animSheet: new ig.AnimationSheet( 'media/atom.png', 16, 16 ),	
+
+	
+	init: function( x, y, settings ) {
+		this.parent( x, y, settings );
+		this.addAnim( 'idle', 1, [0] );
+	},
+	
+	
+	//update: function() {
+	//	this.parent();
+	//}
+});
+
+});

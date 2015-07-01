@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> <!--manifest="formulat.manifest"-->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <title>Particles!</title>
+    <style type="text/css">
+		html,body {
+			background-color: #000;
+			color: #fff;
+			font-family: helvetica, arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			font-size: 12pt;
+		}
+		td {
+			width: 80px;
+			text-align: center;
+		}
+		a:link {
+			color: #fff;
+			font-weight: bold;
+			font-family: helvetica, arial, sans-serif;
+			font-size: 11pt;
+			text-decoration: none;
+		}
+		a:visited {
+			color: #fff;
+			font-weight: bold;
+			font-family: helvetica, arial, sans-serif;
+			font-size: 11pt;
+			text-decoration: none;
+		}
+		a:hover {
+			color: #ccc;
+			font-weight: bold;
+			font-family: helvetica, arial, sans-serif;
+			font-size: 11pt;
+			text-decoration: none;
+		}
+		
+		#canvas {
+			position: relative;
+			left: 85px;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: auto;
+			border: 1px solid #555;
+			width: 855px;
+			height: 585px;
+			z-index: 1;
+		}
+		#rotate {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			display: none;
+			z-index: 2;
+		}
+		.shortcut {
+			background-color: #000;
+			color: #fff;
+			font-family: helvetica, arial, sans-serif;
+			font-size: 10pt;
+		}
+	</style>
+	
+    <script type="text/JavaScript">
+	function clearForm() {
+	    if (document.getElementById('age').defaultValue == document.getElementById('age').value) {
+                document.getElementById('age').value = "";
+            }
+        }
+	
+	function initGame() {
+	    age = document.getElementById("age").value;
+	    players = document.getElementById("players").value;
+	    if (localStorage.length == 0 || localStorage.getItem(localStorage.getItem("age")) != age){
+		localStorage.clear();
+		id = uniqid();
+		localStorage.setItem("id", id);
+		localStorage.setItem("age", age);
+		sessionStorage.setItem("players", players);
+	    }
+	    parent.location = 'game.html';
+	}
+	
+	function uniqid(){
+	    var newDate = new Date;
+	    return newDate.getTime();
+	}
+	
+	function checkStorage() {
+	    if (localStorage.length > 0){
+		id = localStorage.getItem("id");
+		age = localStorage.getItem("age");
+		document.getElementById('age').value = localStorage.getItem("age");
+	    }
+	}
+	
+    </script>
+    <script type="text/javascript">
+    
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-33983674-1']);
+      _gaq.push(['_trackPageview']);
+    
+      (function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    
+    </script>
+</head>
+<body onload="checkStorage()">
+    <div style="position: absolute; left: 110px; top: 50px; font-weight: bold; font-size: 30px">Welcome to</div>
+    <div style="position: absolute; left: 200px; top: 75px; font-weight: bold; font-size: 70px; font-family: 'Lucida Console', Monaco, monospace;">Particles!</div>
+    
+    <div style="position: absolute; left: 70px; top: 160px; font-weight: bold; font-style: italic; font-size: 20px">
+	<p>Enter your age, if you're</br>
+	playing alone or with a friend, and</br>
+	then press "Start Game!"</br>
+	to get started! </p>
+    </div>
+    
+    <div style="position: absolute; left: 420px; top: 190px; font-weight: bold; font-size: 12px">
+	<input type="text" id="age" name="age" value="Enter your age" onfocus="clearForm()"/></br>
+	<select name="players" id="players">
+	    <option value="1" selected="selected">Solo</option>
+	    <option value="2">With friends</option>
+	</select>
+    </div>
+    
+    <button id="start" name="start" type="button" onclick="initGame()" style="position: absolute; left: 300px; top: 265px; font-weight: bold; display:block;">Start Game!</button>
+    
+    <div style="position: absolute; left: 50px; top: 320px; width: 500px; text-align: center; font-size: 12px; font-family: "Verdana", "Arial";">
+	<p>Particles! is part of the <a href="http://ccl.northwestern.edu/rigd/">RiGD research project</a> developed by the <a href="http://ccl.northwestern.edu/">Center for Connected Learning and Computer-based Modeling</a> at Northwestern University, Evanston, IL. We are interested in how people interact with the mechanics we have designed in this game. </p>
+<p>There are no risks to playing the game though you should feel free to stop playing at any point. You may however enjoy the game! If you do, feel free to play it as many times as you want. While your age and game play data will be used in studies exploring how people use Particles!, no data that could be used to identify you will be collected.</p>
+<p>If you have any questions about the study, feel free to contact Northwestern University graduate student, Nathan Holbert at <a href="mailto:rigd@ccl.northwestern.edu">rigd@ccl.northwestern.edu</a>. Your participation is completely voluntary. If you choose to participate and have your gameplay tracked, please press the “Start Game” button above.</p>
+	
+    </div>
+    
+</body>
+</html>
