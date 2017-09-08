@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> <!--manifest="formulat.manifest"-->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <title>Particles!</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <style type="text/css">
+		html,body {
+			background-color: #000;
+			color: #fff;
+			font-family: helvetica, arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			font-size: 12pt;
+		}
+		td {
+			width: 80px;
+			text-align: center;
+		}
+		a:link {
+			color: #fff;
+			font-weight: bold;
+			font-family: helvetica, arial, sans-serif;
+			font-size: 11pt;
+			text-decoration: none;
+		}
+		a:visited {
+			color: #fff;
+			font-weight: bold;
+			font-family: helvetica, arial, sans-serif;
+			font-size: 11pt;
+			text-decoration: none;
+		}
+		a:hover {
+			color: #ccc;
+			font-weight: bold;
+			font-family: helvetica, arial, sans-serif;
+			font-size: 11pt;
+			text-decoration: none;
+		}
+		
+		#canvas {
+			position: relative;
+			left: 85px;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: auto;
+			border: 1px solid #555;
+			width: 855px;
+			height: 585px;
+			z-index: 1;
+		}
+		#rotate {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			display: none;
+			z-index: 2;
+		}
+		.shortcut {
+			background-color: #000;
+			color: #fff;
+			font-family: helvetica, arial, sans-serif;
+			font-size: 10pt;
+		}
+
+	</style>
+	
+    <script type="text/JavaScript">
+	var build = [0001, 6120, 2375, 6940, 9006, 1799, 1075, 2974,3708,8668,1948,2069,9042,9892,4652,7756,1353,1880,6399,8201,5793,4514,5376,9809,2144,5535,6490,3111,3296,7679,3143,5828,5160,4802,5677,5645,7076,3741,9278,8328,9089,6384,3562,5852,7371,3777,1392,9746,1740,8784,4542,4465,6787,5176,5568,2339,6064,4656,4886,8587,3723,8789,1063,4720,5109,7100,7818,4384,7400,6608,2205,1989,5353,7517,7490,1672,5250,9233,7578,2720,3312,6331,9463,6500,3490,5024,3095,7119,7658,2282,6126,4942,5694,1659,3884,3870,8496,9434,4047,1056,14919,44002189,17390,16878,44008319,16644,13013,16712,17118,10940,16948,17534,15011,44005157,44001599,10590,15008,16996,10357,44008200,14917,14465,16435,15004,44005852,16436,17868,16795,17057,16466,10278,14916,13970,16452,12840,44001609,44003627,44003601,16490,14921,44006673,44006000,16645,16484,15499,44004843,13536,13436,44002166,14813,17302,44003112,14289,13518,15597,14285,17264,44003421,15006,10192,13474,120559546,13354,44008029,44009154,44005807,15906,10656,15400,14080,17721,44004578,44001634,10518,14933,44009317,14823,44001756,11616,13240,10773,13680,13967,44007216,14854,10065,16896]; 
+	var premade = [0002, 8209,5275,1589,8568,8582,7473,1310,8895,6590,9774,2500,9265,3382,8325,6580,4622,9398,2985,5835,9833,8322,5113,6777,3392,2419,8921,4435,2635,5948,9004,8279,1960,3491,2254,1912,1323,9194,8336,1435,1350,4425,4442,9133,7270,4088,8098,5059,1998,1900,7828,2267,6609,5202,7010,7552,9143,3968,7395,4473,1548,9468,6456,6962,3939,3051,1060,3031,9541,7012,7030,2670,5343,7185,5480,7750,8490,9918,2461,8370,8654,1011,8208,3908,8679,5235,4521,1449,1565,3435,8440,4148,5281,5823,3459,3329,4343,9730,1454,5490,14997,16530,10903,10425,44004384,15127,44001251,17410,44007205,13292,44001439,17731,44004650,15180,44001326,16461,15952,16924,44006256,14879,17956,16465,14826,14829,12661,44005084,16464,15865,16212,44004509,17032,18002,44004380,44004744,14814,10866,44003346,16210,44004309,44007743,15154,10663,14955,17234,16647,14843,15584,15626,13488,44004516,12407,17607,44003367,13337,15116,16846,44002362,11599,44004760,15069,13513,44007491,14384,13983,44001376,44003573,14872,44008791,17006,44008679,44004707,44004401,44001805,15120,44009263,44009246,44004352,14620,44008031,15117,44009513,13519,13525,14824,44003411,10068,5012432,13713];
+	var condition;
+	function clearFormAge() {
+	    if (document.getElementById('age').defaultValue == document.getElementById('age').value) {
+                document.getElementById('age').value = "";
+            }
+        }
+        function clearFormID() {
+            if (document.getElementById('idNum').defaultValue == document.getElementById('idNum').value) {
+                document.getElementById('idNum').value = "";
+            }
+        }
+	
+	function initGame() {
+	    var match = false;
+	    age = document.getElementById("age").value;
+	    idNum = document.getElementById("idNum").value;
+	    //players = document.getElementById("players").value;
+	    //condition = document.getElementById("condition").value;
+	    for (var i=0; i<build.length; i++){
+	    	if (idNum == build[i]){
+	    		condition = "build";
+	    		match = true;
+	    		continue;
+	    	}
+	    	if (idNum == premade[i]){
+	    		condition = "premade";
+	    		match = true;
+	    		continue;
+	    	}
+	    }
+	    if (match) {
+	    	localStorage.setItem("id", idNum);
+			localStorage.setItem("age", age);
+			localStorage.setItem("condition", condition);
+	    	} else {
+	    		alert("Wrong ID Number! Check your number and try again.")
+	    	}
+
+	 //    if (localStorage.length == 0 || localStorage.getItem(localStorage.getItem("age")) != age){
+		// localStorage.clear();
+		// //id = uniqid();
+		// localStorage.setItem("id", idNum);
+		// localStorage.setItem("age", age);
+		// //sessionStorage.setItem("players", players);
+		// sessionStorage.setItem("condition", condition);
+	 //    }
+	 //    parent.location = 'game.html';
+	}
+	
+	function uniqid(){
+	    var newDate = new Date;
+	    return newDate.getTime();
+	}
+	
+	function checkStorage() {
+	    if (localStorage.length > 0){
+		id = localStorage.getItem("id");
+		age = localStorage.getItem("age");
+		document.getElementById('age').value = localStorage.getItem("age");
+	    }
+	}
+
+    </script>
+
+  <script>
+  $(function() {
+    $(".video").click(function () {
+       var match = false;
+	age = document.getElementById("age").value;
+	idNum = document.getElementById("idNum").value;
+	//players = document.getElementById("players").value;
+	//condition = document.getElementById("condition").value;
+	for (var i=0; i<build.length; i++){
+		if (idNum == build[i]){
+			condition = "build";
+			match = true;
+			continue;
+		}
+		if (idNum == premade[i]){
+			condition = "premade";
+			match = true;
+			continue;
+		}
+	}
+	if (match) {
+	    	localStorage.setItem("id", idNum);
+		localStorage.setItem("age", age);
+		localStorage.setItem("condition", condition);
+
+		var theModal = $(this).data("target");
+		$("#videoModal").modal({backdrop: 'static', keyboard: false})
+		if (condition == "build") {
+			var videoSRC = "ParticlesBuildTutorial_sm2.mp4";
+			var videoSRCauto = videoSRC + "?modestbranding=1&rel=0&controls=0&showinfo=0&html5=1&autoplay=1";
+		} else {
+			var videoSRC = "ParticlesPremadeTutorial_sm2.mp4";
+			var videoSRCauto = videoSRC + "?modestbranding=1&rel=0&controls=0&showinfo=0&html5=1&autoplay=1";
+		}
+		$(theModal + ' iframe').attr('src', videoSRCauto);
+		$(theModal + ' iframe').load(function(){
+		//then set up some access points
+		var contents = $(this).contents(); // contents of the iframe
+		$(contents).find("video").on('ended', function(event) { parent.location = 'game.html'; });
+		})
+		$(theModal + ' button.close').click(function () {
+		$(theModal + ' iframe').attr('src', videoSRC);
+		});
+
+    	} else {
+    		alert("Wrong ID Number! Check your number and try again.")
+    	}
+      
+    });
+  });
+  </script>
+
+    <script type="text/javascript">
+    
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-33983674-1']);
+      _gaq.push(['_trackPageview']);
+    
+      (function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    
+    </script>
+</head>
+<body onload="checkStorage()">
+    <div style="position: absolute; left: 110px; top: 50px; font-weight: bold; font-size: 30px">Welcome to</div>
+    <div style="position: absolute; left: 200px; top: 75px; font-weight: bold; font-size: 70px; font-family: 'Lucida Console', Monaco, monospace;">Particles!</div>
+    
+    <div style="position: absolute; left: 70px; top: 160px; font-style: italic; font-size: 20px">
+	<p>Enter your age and the</br>
+	ID number you were given</br>
+	when you entered class today, </br>
+	and then press "Start Game!"</br>
+	to get started! </p>
+    </div>
+
+<!--     <div style="position: absolute; left: 560px; top: 190px; font-size: 12px">
+    	<p>If you want to try the construction mode</br>
+    	of the game, enter ID 0001. If you'd rather </br>
+    	try the premade blocks, enter ID 0002.</p>
+    </div> -->
+    
+    <div style="position: absolute; left: 420px; top: 190px; color: black; font-size: 12px">
+	<input type="text" id="age" name="age" value="Enter your age" onfocus="clearFormAge()"/></br>
+	<input type="text" id="idNum" name="idNum" value="Enter your ID Number" onfocus="clearFormID()"/></br>
+	<!-- <select name="players" id="players">
+	    <option value="1" selected="selected">Solo</option>
+	    <option value="2">With friends</option>
+	</select>
+	<select name="condition" id="condition">
+	    <option value="build" selected="selected">Version 1</option>
+	    <option value="premade">Version 2</option>
+	</select> -->
+    </div>
+    
+<!--     <button id="start" name="start" type="button" data-video="ParticlesBuildTutorial.mp4" data-toggle="modal" data-target="#videoModal" style="position: absolute; left: 420px; top: 265px; font-weight: bold; display:block;">Start Game!</button>
+ -->    
+    <div style="position: absolute; left: 50px; top: 320px; width: 500px; text-align: center; font-size: 12px; font-family: "Verdana", "Arial";">
+	<p>Particles! is developed by Nathan Holbert, director of the <a href="http://www.snowdaylearninglab.org">Snow Day Learning Lab</a> at <a href="http://tc.columbia.edu">Teachers College, Columbia University</a>. We are interested in how people interact with the mechanics we have designed in this game. </p>
+	<p>There are no risks to playing the game though you should feel free to stop playing at any point. You may however enjoy the game! If you do, feel free to play it as many times as you want. While your age and game play data will be used in studies exploring how people use Particles!, no data that could be used to identify you will be collected.</p>
+	<p>If you have any questions about the study, feel free to contact Nathan Holbert at <a href="mailto:info@snowdaylearninglab.org">info@snowdaylearninglab.org</a>. Your participation is completely voluntary. If you choose to participate and have your gameplay tracked, please press the “Start Game” button above.</p>
+	
+    </div>
+
+    <button class="btn btn-success video" id="start" name="start" data-target="#videoModal" style="position: absolute; left: 420px; top: 265px;">Start Game!</button>
+  <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="position:absolute; left:100px; width:900px;">
+      <div class="modal-content">
+        <div class="modal-body">
+	        <iframe width="100%" height="700" src="" frameborder="0" allowfullscreen>
+		</iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+	<title>Particles!</title>
+	<style type="text/css">
+		html,body {
+			background-color: #000;
+			color: #fff;
+			font-family: helvetica, arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			font-size: 12pt;
+		}
+		td {
+			width: 80px;
+			text-align: center;
+		}
+		.helpHead{
+			font-style: italic;
+		}
+		.helpSubhead{
+			text-decoration: underline;
+		}
+		.helpText{
+			font-size: 10pt;
+		}
+		
+		#canvas {
+			position: relative;
+			left: 85px;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: auto;
+			border: 1px solid #555;
+			width: 855px;
+			height: 585px;
+			z-index: 2;
+		}
+		#rotate {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			display: none;
+			z-index: 3;
+		}
+		.shortcut {
+			background-color: #000;
+			color: #fff;
+			font-family: helvetica, arial, sans-serif;
+			font-size: 10pt;
+		}
+		.ui-widget { font-family: Verdana,Arial,sans-serif; font-size: 1.1em; padding:20px; border: 1px solid #555555; background: #000000 50% 50% repeat; color: #ffffff;  -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -khtml-border-top-left-radius: 6px; border-top-left-radius: 6px; -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -khtml-border-top-right-radius: 6px; border-top-right-radius: 6px; -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -khtml-border-bottom-left-radius: 6px; border-bottom-left-radius: 6px; -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }
+		.ui-widget-head { padding:5px; border: 1px solid #555555; background: #A6A6A6 50% 50% repeat; color: #000000;  -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -khtml-border-top-left-radius: 6px; border-top-left-radius: 6px; -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -khtml-border-top-right-radius: 6px; border-top-right-radius: 6px; -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -khtml-border-bottom-left-radius: 6px; border-bottom-left-radius: 6px; -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }
+	</style>
+	<script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
+	<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyDJRBGrMjpzSfpENoRJrj5B18SzG-aFuTE",
+	    authDomain: "particles-test.firebaseapp.com",
+	    databaseURL: "https://particles-test.firebaseio.com",
+	    storageBucket: "particles-test.appspot.com",
+	    messagingSenderId: "251883119552"
+	  };
+	  firebase.initializeApp(config);
+	</script>
+	<script type="text/javascript" src="lib/impact/impact.js"></script>
+	<script type="text/javascript" src="lib/game/main.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!--<script type="text/javascript" src="/static/game.min.js"></script>-->
+	<script type="text/javascript">
+	
+	window.onbeforeunload = function(){
+		ig.game.logLevelEvent("level_quit");
+		//ig.game.exportBlockArray("quit");
+	}
+	
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-33983674-1']);
+	  _gaq.push(['_trackPageview']);
+	
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	  
+	window.addEventListener("storage", function(e) {
+		console.debug(e);
+	}, false);
+	
+	
+	toggleBox = function(img){
+		if (ig.game.game_mode != 2){ // don't open when atomizer open
+			if (ig.game.device == "computer"){
+				document.getElementById("keyboardMove").style.display = "block";
+				document.getElementById("iPadMove").style.display = "none";
+				document.getElementById("keyboardThrow").style.display = "block";
+				document.getElementById("iPadThrow").style.display = "none";
+				document.getElementById("keyboardCreate1").style.display = "block";
+				document.getElementById("iPadCreate1").style.display = "none";
+				document.getElementById("keyboardCreate2").style.display = "block";
+				document.getElementById("iPadCreate2").style.display = "none";
+			}
+			var box = document.getElementById("modal");
+			if (box.style.display == "block"){
+			    box.style.display = "none";
+			    box.style.zIndex = "1";
+			    img.src = "media/help.png";
+			    if (ig.game.loaded){
+				ig.game.game_mode = ig.game.game_modes.PLAYING_LEVEL;
+				ig.game.helpOpen = false;
+			    }
+			} else {
+			    box.style.display = "block";
+			    box.style.zIndex = "3";
+			    img.src = "media/helpOpen.png";
+			    if (ig.game.loaded){
+				ig.game.game_mode = ig.game.game_modes.INFO;
+				ig.game.helpOpen = true;
+			    }
+			}
+		}
+	    }
+	    
+	toggleItem = function(head, item){
+	    var elements = document.getElementsByTagName('li')
+	    var itemName = head + item;
+	    var box = document.getElementById(itemName);
+	    for (var i=0; i<elements.length; i++){
+		if (elements[i].id.indexOf("item") != -1 && elements[i].id != itemName){
+		    elements[i].style.display = "none";
+		}
+	    }
+	    if (box.style.display == "block"){
+		box.style.display = "none";
+	    } else {
+		box.style.display = "block";
+	    }
+	}
+	
+	</script>
+</head>
+<body>
+	<div class=wrap>
+	<canvas id="canvas"></canvas>
+	<canvas id="canvasD" width=38 height=38 style="position:absolute; left:-100; top:0; z-index:1; border: 1px solid #555;"></canvas>
+	<table style="position: relative; margin-left:0; margin-right: 855">
+		<tr>
+			<td style="width:100px"></td>
+			<td style="width: 150px"><div id="block"><span id="blockText">Available Blocks: 12</span><br><img id="blockImage" src="media/green_blocks_thumb.png" onclick="ig.game.toggleAtomizer()"></div></td>
+			<td style="width:200px"></td>
+			<td style="width:100px"><span id="breaker"><div id="breakerText">Breaker</div><img id="breakerImage" src="media/breaker.png" onclick="ig.game.breakBlocks()"></span><div id="breakerText2" class="shortcut">&lt;shift&gt;</div></td>
+			<td style="width:100px"><span id="atomizer"><div id="atomizerText">Atomizer</div><img id="atomizerImage" src="media/atombg.png" onclick="ig.game.toggleAtomizer()"></span><div id="atomizerText2" class="shortcut">&lt;space&gt;</div></td>
+			<td style="width:100px"><span id="testBlock" style="display: none"><div id="TestText">Test</div><img id="testImage" src="media/icon_test.png" onclick="ig.game.testBlock()"></span><div id="testText2" class="shortcut"></div></td>
+			<!--<td><div id="switch"><div id="switchText">Switch</div><img id="switchImage" src="media/atombg-y.png" onclick="ig.game.changeRep()"></div></td>-->
+		</tr>
+	</table>
+	<span id="up" style="position:absolute; right:0px; top:585px; z-index:2;"></span>
+	<span id="left" style="position:absolute; left:0px; top:585px; z-index:2;"></span>
+	<span id="right" style="position:absolute; left:80px; top:585px; z-index:2;"></span>
+	<img id="rotate" src="media/rotate.png" alt="Rotate"/>
+	<span id="volume" style="position:absolute; left:950px; top:0px; z-index:2;"><img id="volumeImage" src="media/volume.png" onclick="ig.game.toggleVolume()"></span>
+	<span id="volume" style="position:absolute; left:950px; top:80px; z-index:2;"><img id="helpImage" src="media/help.png" onclick="toggleBox(this)"></span>
+	<span id="arrow" style="position:absolute; left:950px; top:160px; z-index:2;"><img id="arrowImage" src="media/arrow.png" onclick="ig.game.toggleArrow()"></span>
+	
+
+	<div id="modal" style="display:none; position:absolute; top:10px; left:90px; width:805px;" class="ui-widget">
+	    <ul>
+		<div class="ui-widget-head">
+		<li id="heading1" class="helpHead" style="display:block;" onclick="toggleItem(this.id, 'item')">Basic Controls</li>
+		<ul>
+		    <li id="heading1item" style="display:none;">
+			<span id="keyboardMove" style="display:none;">
+				<p class="helpSubhead" >Moving</p>
+				<p class="helpText">Press "A" to move left and "D" to move right.<br>
+				Press "W" to jump.</p>
+				<p class="helpSubhead" >Other Controls</p>
+				<p class="helpText">Press the "Space" key to open and close the atomizer.<br>
+				Press the "Shift" key to activate the breaker to break blocks prematurely.<br>
+				When the Atomizer is open, press "E" to test the properties of the structure.</p>
+			</span>
+			<span id="iPadMove" style="display:block;">
+				<p class="helpSubhead" >Moving</p>
+				<p class="helpText">Use the arrow buttons on the iPad to move left and right.<br>
+				Use the "up" arrow button to jump.</p>
+				<p class="helpSubhead" >Other Controls</p>
+				<p class="helpText">Tap the "Atomizer" image along the bottom to open and close the atomizer.<br>
+				Tap the "Breaker" button to break blocks prematurely.<br>
+				When the Atomizer is open, tap the "Test" button to test the properties of the structure.</p>
+			</span>
+		    </li>
+		</ul>
+		</div>
+		<div class="ui-widget-head">
+		<li id="heading2" class="helpHead" style="display:block;" onclick="toggleItem(this.id, 'item')">Throwing Blocks</li>
+		<ul>
+		    <li id="heading2item" style="display:none;">
+			<span id="keyboardThrow" style="display:none">
+				<p class="helpText">As you play the game you may discover obstacles in your way. If you find a wall you can't pass through or a platform out of reach, try throwing a block!</p>
+				<p class="helpSubhead" >How do I throw blocks?</p>
+				<p class="helpText">To throw a block click the location you want the block to appear. Your character will then try to throw a block to the location you just clicked.<p>
+				<p class="helpText">If you throw a block at one of the many light gray tiles that make up the level the block will replace that tile. If the created block is fragile, it might crumble, removing the thrown block and the gray tiles from the level. If the thrown block is slippery, when it crumbles it might loosen the replaced block causing it to fall. For more on block properties see the "Creating Blocks" section of the help menu.</p>
+				<p class="helpText">Dark gray tiles cannot be removed or replaced. Blocks thrown at these dark gray tiles will land next to the tiles.</p>
+				<p class="helpText">You can only have 12 player-created blocks in the world at one time.  If you've thrown the maximum number of blocks try pressing the breaker button to remove them.</p>
+			</span>
+			<span id="iPadThrow" style="display:block;">
+				<p class="helpText">As you play the game you may discover obstacles in your way. If you find a wall you can't pass through or a platform out of reach, try throwing a block!</p>
+				<p class="helpSubhead" >How do I throw blocks?</p>
+				<p class="helpText">To throw a block tap the location you want the block to appear. Your character will then try to throw a block to the location you just tapped.<p>
+				<p class="helpText">If you throw a block at one of the many light gray tiles that make up the level the block will replace that tile. If the created block is fragile, it might crumble, removing the thrown block and the gray tiles from the level. If the thrown block is slippery, when it crumbles it might loosen the replaced block causing it to fall. For more on block properties see the "Creating Blocks" section of the help menu.</p>
+				<p class="helpText">Dark gray tiles cannot be removed or replaced. Blocks thrown at these dark gray tiles will land next to the tiles.</p>
+				<p class="helpText">You can only have 12 player-created blocks in the world at one time.  If you've thrown the maximum number of blocks try tapping the breaker button to remove them.</p>
+			</span>
+		    </li>
+		</ul>
+		</div>
+		<div class="ui-widget-head">
+		<li id="heading3" class="helpHead" style="display:block;" onclick="toggleItem(this.id, 'item')">Creating Blocks 1</li>
+		<ul>
+		    <li id="heading3item" style="display:none;">
+			<span id="keyboardCreate1" style="display:none;">
+				<p class="helpsubHead">Creating Blocks</p>
+				<p class="helpText">Thrown blocks are not all the same! Some are fragile, some are hard, some slippery, and some are bouncy! Some blocks have a mixture of each of these properties!  To succeed in Particles! you'll have to master block building in the Atomizer. To open the Atomizer, press the "Space" key or click the Atomizer button at the bottom of the screen.</p>
+				<p class="helpText">When you open the atomizer you'll see four multicolored blocks along the right side and many small white spheres in the middle. The area containing the white spheres represents a repeating unit that will make up each thrown block.  It's important to remember that each block is actually made up of thousands of the pattern represented in the atomizer.</p>
+				<p class="helpText">To change the structure that makes up thrown blocks you can add atoms and connect them with bonds. Click and drag from one white sphere to another to create two atoms connected by a bond. To remove a bond, click the bond. Bonds cannot be created between atoms that are diagonal to each other.</p>
+				<p class="helpText">You can have up to four different kinds of blocks at one time. To switch to another block, click the colored blocks on the right of the atomizer. The block that is currently displayed in the Atomizer will be the active block the character will throw.</p>
+			</span>
+			<span id="iPadCreate1">
+				<p class="helpsubHead" style="display:block;">Creating Blocks</p>
+				<p class="helpText">Thrown blocks are not all the same! Some are fragile, some are hard, some slippery, and some are bouncy! Some blocks have a mixture of each of these properties!  To succeed in Particles! you'll have to master block building in the Atomizer. To open the Atomizer, tap the "Atomizer" button at the bottom of the screen.</p>
+				<p class="helpText">When you open the atomizer you'll see four multicolored blocks along the right side and many small white spheres in the middle. The area containing the white spheres represents a repeating unit that will make up each thrown block.  It's important to remember that each block is actually made up of thousands of the pattern represented in the atomizer.</p>
+				<p class="helpText">To change the structure that makes up thrown blocks you can add atoms and connect them with bonds. Tap and drag from one white sphere to another to create two atoms connected by a bond. To remove a bond, tap the bond. Bonds cannot be created between atoms that are diagonal to each other.</p>
+				<p class="helpText">You can have up to four different kinds of blocks at one time. To switch to another block, tap the colored blocks on the right of the atomizer. The block that is currently displayed in the Atomizer will be the active block the character will throw.</p>
+			</span>
+		    </li>
+		</ul>
+		</div>
+		<div class="ui-widget-head">
+		<li id="heading4" class="helpHead" style="display:block;" onclick="toggleItem(this.id, 'item')">Creating Blocks 2</li>
+		<ul>
+		    <li id="heading4item" style="display:none;">
+			<span id="keyboardCreate2" style="display:none;">
+				<p class="helpSubhead">What kinds of blocks can I create?</p>
+				<p class="helpText">Thrown blocks will have a mixture of three main properties: hardness, slipperiness, and bounciness. To get a feel for what kind of block you've made, try shaking the atomizer by pressing the "shake" button or "E" key. Watch how the atoms and structures move around in the atomizer to get an idea for how a thrown block might behave.</p>
+				<p class="helpSubhead">Hardness</p>
+				<p class="helpText">Blocks with few atoms and bonds are very fragile and quickly crumble after being thrown. By adding bonds blocks become harder. Extremely hard blocks can only be broken using the "breaker" button.</p>
+				<p class="helpSubhead">Slipperiness</p>
+				<p class="helpText">Some blocks can be very slippery because the structures that makes up the block are free to slide around one another rather than connected. Be careful when running on slippery blocks as it's very hard to stop! Slippery blocks are great for loosening up light gray tiles. Tiles that have been replaced by slippery blocks are likely to fall once the thrown block has crumbled! Falling blocks are dangerous so watch out below!</p>
+				<p class="helpSubhead">Bounciness</p>
+				<p class="helpText">Bouncy blocks are great for helping you to get to platforms that are usually out of reach. Jumping on one of these blocks will cause you to bounce a bit higher than normal. Falling onto one of these blocks from a big height will give you a huge boost! Making a bouncy block can be a bit tricky. Think about what kinds of structures might give a block some spring...</p>
+			</span>
+			<span id="iPadCreate2" style="display:block;">
+				<p class="helpSubhead">What kinds of blocks can I create?</p>
+				<p class="helpText">Thrown blocks will have a mixture of three main properties: hardness, slipperiness, and bounciness. To get a feel for what kind of block you've made, try phyically shaking the iPad. Watch how the atoms and structures move around in the atomizer to get an idea for how a thrown block might behave.</p>
+				<p class="helpSubhead">Hardness</p>
+				<p class="helpText">Blocks without bonds are very fragile and quickly crumble after being thrown. By adding bonds, blocks become harder. Extremely hard blocks can only be broken using the "breaker" button.</p>
+				<p class="helpSubhead">Slipperiness</p>
+				<p class="helpText">Some blocks can be very slippery because the structures that makes up the block are free to slide around one another rather than connected. Be careful when running on slippery blocks as it's very hard to stop! Slippery blocks are great for loosening up light gray tiles. Tiles that have been replaced by slippery blocks are likely to fall once the thrown block has crumbled! Falling blocks are dangerous so watch out below!</p>
+				<p class="helpSubhead">Bounciness</p>
+				<p class="helpText">Bouncy blocks are great for helping you to get to platforms that are usually out of reach. Jumping on one of these blocks will cause you to bounce a bit higher than normal. Falling onto one of these blocks from a big height will give you a huge boost! Making a bouncy block can be a bit tricky. Think about what kinds of structures might give a block some spring...</p>
+			</span>
+		    </li>
+		</ul>
+	    </ul>
+	</div>
+</div>
+</body>
+</html>

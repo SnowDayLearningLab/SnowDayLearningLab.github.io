@@ -1,0 +1,156 @@
+ig.module(
+	'game.entities.atom'
+)
+.requires(
+	'impact.entity'
+)
+.defines(function(){
+
+EntityAtom = ig.Entity.extend({
+	gravityFactor: 0,
+	size: {x: 30, y:30},
+	offset: {x: 5, y: 5},
+	fullsize: {x: 40, y: 40},
+	relx: null,
+	rely: null,
+	zIndex: 18,
+	active: false,
+	loading: true,
+	state: 'solo',
+	partner: [],
+	bondx: 0,
+	bondy: 0,
+	
+	type: ig.Entity.TYPE.A, // Player friendly group
+	checkAgainst: ig.Entity.TYPE.A,
+	collides: ig.Entity.COLLIDES.NEVER,
+	
+	//animSheet: new ig.AnimationSheet( 'media/player.png', 16, 16 ),	
+	
+	
+	// These are our own properties. They are not defined in the base
+	// ig.Entity class. We just use them internally for the Player
+	bound: false,
+	bounce: 0,
+	rigid: 1,
+	animSheet: new ig.AnimationSheet( 'media/atomsm-sheet.png', 40, 40 ),
+	init: function( x, y, settings ) {
+		this.parent( x, y, settings );
+		this.addAnim( 'idle', 1, [0] );
+		this.addAnim( 'ball', 1, [1] ); // for ball and stick rep
+		this.addAnim( 'overlap', 1, [4] );
+		this.atomizer = ig.game.getEntitiesByType (EntityAtomizer)[0];
+		this.state = settings.state;
+		this.relx = settings.relx;
+		this.rely = settings.rely;
+		//if (this.state == "overlap"){
+			this.partner = settings.partner;
+		//}
+	},
+	
+	inBounds: function(){
+		var minx = this.atomizer.pos.x + this.fullsize.x/2;
+		var miny = this.atomizer.pos.y + this.fullsize.y/2;
+		var maxx = this.atomizer.pos.x + (this.atomizer.size.x - 50 - (this.fullsize.x/2));
+		var maxy = this.atomizer.pos.y + (this.atomizer.size.y - 50 - (this.fullsize.y/2));
+		var mx = ig.input.mouse.x + ig.game.screen.x;
+		var my = ig.input.mouse.y + ig.game.screen.y;
+		return( (mx > minx && mx < maxx) && (my > miny && my < maxy));
+	},
+	
+	update: function() {
+	//    if (!this.atomizer.justLoaded) {
+	//	this.active = false;
+	//    }
+	    
+		if (ig.input.state('click') && this.active && ig.game.game_mode == 2) {
+			if (this.inBounds()){
+				this.pos.x = (ig.input.mouse.x + ig.game.screen.x) - (this.fullsize.x / 2);
+				this.pos.y = (ig.input.mouse.y + ig.game.screen.y) - (this.fullsize.y / 2);
+				this.relx = this.pos.x - this.atomizer.pos.x;
+				this.rely = this.pos.y - this.atomizer.pos.y;
+			}
+		}
+	    
+	    if (this.state == 'overlap' && this.atomizer.atomsLoaded){
+		this.currentAnim = this.anims.overlap;
+		var numTouch = 0;
+		for (var i=0; i<this.partner.length; i++){
+			//if (!this.partner[i]._killed){ // check to make sure this one isn't dead
+				if (this.touches(this.partner[i])) {
+					numTouch += 1;
+				} else {
+					this.partner.splice(i, 1);
+					if (this.partner.length == 0){
+						numTouch = 0;
+					}
+				}
+			//} else {
+			//	this.partner.splice(i,1); // if it is remove (MAY BE ABLE TO REMOVE EVENTUALLY)
+			//}
+		}
+		if (numTouch == 0){
+			this.partner = [];
+			this.state = 'solo';
+		}
+	    } else {
+		this.currentAnim = this.anims.idle;
+	    }
+	    this.parent();
+	},
+	
+	createBond: function(other){
+		var matchflag;
+		for (var i=0; i < other.partner.length; i++){
+			if (other.partner[i].id == this.id){
+				matchflag = true;
+			}
+		}
+		if (!matchflag) {
+			var dist = this.distanceTo (other) - this.fullsize.x/2;
+			var angle = this.angleTo (other);
+			var x = this.pos.x + Math.cos(angle) * dist;
+			var y = this.pos.y + Math.sin(angle) * dist;
+			ig.game.spawnEntity(EntityBond, x, y, {heading:angle, owner:this, connected:other});
+			//console.log('bond created');
+		}
+	},
+	
+	overlap: function (other){
+		if (this.state == 'solo') {
+			this.state = 'overlap';
+		}
+		if (this.active){
+			if (this.partner.length != 0) {
+				var matchflag;
+				for (var i=0; i<this.partner.length; i++){
+					if (other.id == this.partner[i].id){
+						matchflag = true;
+					}
+				}
+				if (!matchflag){
+					this.createBond(other);
+					this.partner.push(other);
+				}
+			} else {
+				this.createBond(other);
+				this.partner.push(other);
+			}
+		}
+	},
+	
+	check: function( other ) {
+		if (other instanceof EntityAtom) {
+			if (!other._killed){  //(MAY BE ABLE TO REMOVE EVENTUALLY)
+				this.overlap(other);
+			}
+		}
+	},
+
+	draw: function(){
+		this.parent();
+	}
+
+});
+
+});

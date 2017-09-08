@@ -154,6 +154,12 @@
 		text-align: right;
 	}
 
+	.name {
+		color: #22A7F0;
+		font-size: 1.25em;
+		font-weight: 700;
+	}
+
 /* Section/Article */
 
 	section.special, article.special {
@@ -1037,7 +1043,7 @@
 
 /* One */
 
-	#one:before {
+	#about:before {
 		background-image: url("../images/SnowDayBanner.png");
 		background-position: top right;
 		background-repeat: no-repeat;

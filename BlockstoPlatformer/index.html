@@ -1,0 +1,33 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>tracking.js - color with camera</title>
+  <script src="tracking.js"></script>
+  <!--<script src="../build/dat.gui.min.js"></script>
+  <script src="assets/color_camera_gui.js"></script> -->
+  <script src="BlocksTest.js"></script>
+
+  <style>
+  video, canvas {
+    margin-left: 100px;
+    margin-top: 35px;
+    position: absolute;
+  }
+  button{
+    position: absolute;
+    left: 600px;
+    top: 500px; 
+  }
+  canvas{border:1px solid black;}
+  </style>
+</head>
+<body onload="initVars()">
+    <!-- <video id="video" width="600" height="450" preload autoplay loop muted controls></video> -->
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <!-- <input type="button" id="capture" value="Capture" onclick="capture()"> -->
+    <input type="file" id="loadIMG" accept="image/*"><br>
+    <input type="button" id="drawPlatforms" value="Draw Platforms" onclick="drawPlatforms(platforms)"><br>
+    <input type="button" id="play" value="Play!" onclick="playGame()">
+
+</body>
+</html>
